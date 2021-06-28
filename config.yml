@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  aws-eks: circleci/aws-eks@1.0.3
+jobs:
+  run-tests:
+    docker: 
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Installing Python dependencies
+          command: pip install -r requirements_dev.txt
+      - run: 
+          name: Running tests
+          command: tox -e py38-tests
+      - store_test_results:
+          path: ~/tox/
+  trigger-bodywork-deployment:
+    executor:
+      name: aws-eks/python
+      tag: "3.8"
+    steps:
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: bodywork-dev
+      - checkout
+      - run:
+          name: Installing Python dependencies
+          command: pip install -r requirements_dev.txt
+      - run: 
+          name: Trigger Deployment
+          command: |
+            export BODYWORK_GIT_SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"$'\n'
+            bodywork deployment create --local --ns=bodywork-ml --name=cicd-pipeline --git-repo-url=git@github.com:bodywork-ml/bodywork-core-usage-tracker.git --git-repo-branch=main
+
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - run-tests:
+          filters:
+            branches:
+              ignore: main
+      - trigger-bodywork-deployment:
+          filters:
+            branches:
+              only: main

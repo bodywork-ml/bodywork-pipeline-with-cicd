@@ -1,5 +1,5 @@
 """
-This module defines what will happen in 'stage-2-deploy-scoring-service':
+This module defines what will happen in the 'serve-model' stage:
 
 - download ML model and load into memory;
 - define ML scoring REST API endpoints; and,
@@ -81,8 +81,10 @@ def model_predictions(features: np.ndarray) -> Dict[str, str]:
     return results
 
 
+model = get_model(MODEL_URL)
+
+
 if __name__ == '__main__':
-    model = get_model(MODEL_URL)
     print(f'loaded model={model}')
     print(f'starting API server')
     app.run(host='0.0.0.0', port=5000)
