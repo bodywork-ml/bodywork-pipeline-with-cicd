@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Installing Python dependencies
-          command: pip install -r requirements_dev.txt
+          command: pip install -r requirements_cicd.txt
       - run: 
           name: Running tests
           command: tox -e
@@ -25,7 +25,7 @@ jobs:
       - checkout
       - run:
           name: Installing Python dependencies
-          command: pip install -r requirements_dev.txt
+          command: pip install -r requirements_cicd.txt
       - run: 
           name: Trigger Deployment
           command: |
