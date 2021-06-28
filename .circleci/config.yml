@@ -12,7 +12,7 @@ jobs:
           command: pip install -r requirements_dev.txt
       - run: 
           name: Running tests
-          command: tox -e py38-tests
+          command: tox -e
       - store_test_results:
           path: ~/tox/
   trigger-bodywork-deployment:
@@ -30,7 +30,7 @@ jobs:
           name: Trigger Deployment
           command: |
             export BODYWORK_GIT_SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"$'\n'
-            bodywork deployment create --local --ns=bodywork-ml --name=cicd-pipeline --git-repo-url=git@github.com:bodywork-ml/bodywork-core-usage-tracker.git --git-repo-branch=main
+            bodywork deployment create --local --ns=ml-pipeline --name=cicd-pipeline --git-repo-url=git@github.com:bodywork-ml/bodywork-core-usage-tracker.git --git-repo-branch=master
 
 workflows:
   version: 2
