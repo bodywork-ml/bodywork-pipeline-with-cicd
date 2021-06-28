@@ -12,9 +12,7 @@ jobs:
           command: pip install -r requirements_cicd.txt
       - run: 
           name: Running tests
-          command: tox -e
-      - store_test_results:
-          path: ~/tox/
+          command: tox
   trigger-bodywork-deployment:
     executor:
       name: aws-eks/python
