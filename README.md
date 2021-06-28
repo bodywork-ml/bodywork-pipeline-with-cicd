@@ -36,10 +36,12 @@ $ bodywork setup-namespace ml-pipeline
 To test the ML pipeline, using a workflow-controller running on your local machine and interacting with your Kubernetes cluster, run,
 
 ```shell
-$ bodywork workflow \
+$ bodywork deployment create \
+    --name=initial-deployment \
     --namespace=ml-pipeline \
-    https://github.com/bodywork-ml/bodywork-ml-pipeline-project \
-    master
+    --git-repo-url=https://github.com/bodywork-ml/bodywork-pipeline-with-cicd \
+    --git-repo-branch=master \
+    --local-workflow-controller
 ```
 
 The workflow-controller logs will be streamed to your shell's standard output until the job has been successfully completed.
@@ -55,7 +57,7 @@ $ kubectl proxy
 Then in a new shell, you can use the curl tool to test the service. For example,
 
 ```shell
-$ curl http://localhost:8001/api/v1/namespaces/ml-pipeline/services/bodywork-ml-pipeline-project--stage-2-scoring-service/proxy/iris/v1/score \
+$ curl http://localhost:8001/api/v1/namespaces/ml-pipeline/services/bodywork-pipeline--serve-moel/proxy/iris/v1/score \
     --request POST \
     --header "Content-Type: application/json" \
     --data '{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2}'
@@ -71,12 +73,12 @@ Should return,
 }
 ```
 
-According to how the payload has been defined in the `stage-2-scoring-service/serve_model.py` module.
+According to how the payload has been defined in the `pipeline/serve_model.py` module.
 
 If an ingress controller is operational in your cluster, then the service can be tested via the public internet using,
 
 ```shell
-$ curl http://YOUR_CLUSTERS_EXTERNAL_IP/ml-pipeline/bodywork-ml-pipeline-project--stage-2-scoring-service/iris/v1/score \
+$ curl http://YOUR_CLUSTERS_EXTERNAL_IP/ml-pipeline/bodywork-pipeline--serve-model/iris/v1/score \
     --request POST \
     --header "Content-Type: application/json" \
     --data '{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2}'
@@ -93,7 +95,7 @@ $ bodywork cronjob create \
     --namespace=ml-pipeline \
     --name=train-and-deploy \
     --schedule="0 * * * *" \
-    --git-repo-url=https://github.com/bodywork-ml/bodywork-ml-pipeline-project \
+    --git-repo-url=https://github.com/bodywork-ml/bodywork-pipeline-with-cicd \
     --git-repo-branch=master
 ```
 

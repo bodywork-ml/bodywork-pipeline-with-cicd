@@ -1,6 +1,6 @@
 version: "1.0"
 project:
-  name: bodywork-ml-pipeline-project
+  name: bodywork-pipeline
   docker_image: bodyworkml/bodywork-core:latest
   DAG: train-model >> serve-model
 stages:
