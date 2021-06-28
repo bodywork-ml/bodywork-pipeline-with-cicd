@@ -12,7 +12,7 @@ jobs:
           command: pip install -r requirements_cicd.txt
       - run: 
           name: Running tests
-          command: tox
+          command: pytest
   trigger-bodywork-deployment:
     executor:
       name: aws-eks/python
@@ -27,7 +27,12 @@ jobs:
       - run: 
           name: Trigger Deployment
           command: |
-            bodywork deployment create --local --ns=ml-pipeline --name=cicd-pipeline --git-repo-url=https://github.com/bodywork-ml/bodywork-pipeline-with-cicd.git --git-repo-branch=master
+            bodywork deployment create \
+                --ns=ml-pipeline \
+                --name=cicd-pipeline \
+                --git-repo-url=https://github.com/bodywork-ml/bodywork-pipeline-with-cicd.git \
+                --git-repo-branch=master \
+                --local-workflow-controller
 
 workflows:
   version: 2
