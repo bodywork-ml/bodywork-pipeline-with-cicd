@@ -29,8 +29,7 @@ jobs:
       - run: 
           name: Trigger Deployment
           command: |
-            export BODYWORK_GIT_SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"$'\n'
-            bodywork deployment create --local --ns=ml-pipeline --name=cicd-pipeline --git-repo-url=git@github.com:bodywork-ml/bodywork-core-usage-tracker.git --git-repo-branch=master
+            bodywork deployment create --local --ns=ml-pipeline --name=cicd-pipeline --git-repo-url=https://github.com/bodywork-ml/bodywork-pipeline-with-cicd.git --git-repo-branch=master
 
 workflows:
   version: 2
