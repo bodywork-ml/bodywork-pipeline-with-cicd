@@ -10,6 +10,7 @@ jobs:
       - run:
           name: Installing Python dependencies
           command: pip install -r requirements_cicd.txt
+          command: pip install -r requirements_dev.txt
       - run: 
           name: Running tests
           command: pytest
