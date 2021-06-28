@@ -36,8 +36,8 @@ workflows:
       - run-tests:
           filters:
             branches:
-              ignore: main
+              ignore: master
       - trigger-bodywork-deployment:
           filters:
             branches:
-              only: main
+              only: master
